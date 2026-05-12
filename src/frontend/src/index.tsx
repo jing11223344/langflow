@@ -1,6 +1,6 @@
 import "./i18n";
-import { loadLanguage } from "./i18n";
 import ReactDOM from "react-dom/client";
+import { loadLanguage } from "./i18n";
 import reportWebVitals from "./reportWebVitals";
 
 import "./style/classes.css";
@@ -18,10 +18,19 @@ const detectedLang =
   navigator.language.split("-")[0] ||
   "en";
 
-loadLanguage(detectedLang).then(() => {
+function renderApp() {
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
   );
   root.render(<App />);
   reportWebVitals();
-});
+}
+
+loadLanguage(detectedLang)
+  .catch((err) => {
+    console.warn(
+      `Failed to load language "${detectedLang}", falling back to English.`,
+      err,
+    );
+  })
+  .then(renderApp);
